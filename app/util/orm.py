@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 import time
 from datetime import datetime, date
 from decimal import Decimal
