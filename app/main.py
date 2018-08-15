@@ -82,7 +82,7 @@ def get_city_info(city_id):
             break
 
     else:
-        logging.error(f'# 抱歉, 链家网暂未收录该城市~')
+        logging.error('# 抱歉, 链家网暂未收录该城市~')
         sys.exit(1)
 
     return city_info
@@ -160,7 +160,7 @@ def get_communities_by_biz_circle(city_id, biz_circle_id):
 
     return communities
 
-
+community_id_set = set()
 def update_db(db_session, biz_circle, communities):
     """
     更新小区信息, 商圈信息
@@ -170,6 +170,12 @@ def update_db(db_session, biz_circle, communities):
     ).delete()
 
     for community_info in communities['list']:
+         # 去重 TODO
+        cid = community_info['community_id']
+        if cid in community_id_set:
+            # print('ignore community id {}'.format(cid))
+            continue
+        community_id_set.add(cid)
         try:
             district_id = DISTRICT_MAP[community_info['district_name']]
             community = Community(biz_circle.city_id, district_id, biz_circle.id, community_info)
